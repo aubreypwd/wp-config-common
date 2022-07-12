@@ -10,7 +10,8 @@
         }
     ],
     "require": {
-        "spatie/ray": "^1.34"
+        "spatie/ray": "^1.34",
+        "spatie/macroable": "^1.0"
     },
     "autoload": {
       "files": [
@@ -18,6 +19,6 @@
       ]
     },
     "config": {
-      "platform-check": true
+      "platform-check": false
     }
 }
