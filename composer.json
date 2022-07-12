@@ -1,0 +1,23 @@
+{
+    "name": "aubreypwd/wp-config-common",
+    "description": "Common configurations I plug into wp-config.php for WordPress.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aubrey Portwood",
+            "email": "code@aubreypwd.com"
+        }
+    ],
+    "require": {
+        "spatie/ray": "^1.34"
+    },
+    "autoload": {
+      "files": [
+        "src/autoload.php"
+      ]
+    },
+    "config": {
+      "platform-check": false
+    }
+}
