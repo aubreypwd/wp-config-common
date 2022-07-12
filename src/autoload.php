@@ -72,9 +72,13 @@ if ( defined( 'WP_CONFIG_COMMON' ) && is_string( WP_CONFIG_COMMON ) ) {
 				: $_SERVER['HTTP_X_FORWARDED_HOST']; // Make sure we mock the proxy.
 		}
 
-		// Set WP_HOME;
-		define( 'WP_HOME', 'on' === $_SERVER['HTTPS'] ? "https://{$_SERVER['HTTP_HOST']}" : "http://{$_SERVER['HTTP_HOST']}" );
-		define( 'WP_SITEURL', WP_HOME );
+		// Because WP_CLI doesn't define this.
+		if ( isset( $_SERVER['HTTP_HOST'] ) ) {
+
+			// Set WP_HOME;
+			define( 'WP_HOME', 'on' === $_SERVER['HTTPS'] ? "https://{$_SERVER['HTTP_HOST']}" : "http://{$_SERVER['HTTP_HOST']}" );
+			define( 'WP_SITEURL', WP_HOME );
+		}
 	}
 
 	// Spatie Ray(tm)
