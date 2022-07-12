@@ -52,6 +52,18 @@ if ( defined( 'WP_CONFIG_COMMON' ) && is_string( WP_CONFIG_COMMON ) ) {
 	}
 
 	/**
+	 * Disable email.
+	 *
+	 * @since Tuesday, July 12, 2022
+	 */
+	if ( in_array( 'no-email', $configs, true ) ) {
+
+		function wp_mail() {
+			return defined( 'WP_MAIL_RETURN' ) ? WP_MAIL_RETURN : false;
+		}
+	}
+
+	/**
 	 * Support for tunneling using ngrok or localtunnel.
 	 *
 	 * Note, does not work well with multisite!
