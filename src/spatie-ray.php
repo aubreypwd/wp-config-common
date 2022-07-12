@@ -11,10 +11,6 @@
  * @since Monday, July 11, 2022
  */
 
-if ( ! function_exists( 'ray') ) {
-	return;
-}
-
 /**
  * Report errors to Spatie Ray.
  *
@@ -30,59 +26,45 @@ function ____error_to_spatie_ray() {
 
 	$error = error_get_last();
 
-	if ( $error === NULL ) {
+	if ( ! isset( $error['type'] ) ) {
 		return;
 	}
 
 	// Comment these out to ignore errors.
-	if ( in_array( true, defined( 'SPATIE_RAY_NO_WARNINGS' ) ? [] : [
+	if ( ( ! defined( 'SPATIE_RAY_NO_WARNINGS' ) || false === SPATIE_RAY_NO_WARNINGS ) && in_array( $error['type'], [
 
-		/* Ignore Notices, Warnings, and Deprecations */
-
-			$error['type'] === E_WARNING,
-			$error['type'] === E_NOTICE,
-			$error['type'] === E_CORE_WARNING,
-			$error['type'] === E_COMPILE_WARNING,
-			$error['type'] === E_USER_WARNING,
-			$error['type'] === E_USER_NOTICE,
-			$error['type'] === E_STRICT,
-			$error['type'] === E_RECOVERABLE_ERROR,
-			$error['type'] === E_DEPRECATED,
-			$error['type'] === E_USER_DEPRECATED,
-
-		/* Ignore Errors */
-
-			$error['type'] === E_ERROR,
-			$error['type'] === E_PARSE,
-			$error['type'] === E_CORE_ERROR,
-			$error['type'] === E_COMPILE_ERROR,
-			$error['type'] === E_USER_ERROR,
+		E_WARNING,
+		E_NOTICE,
+		E_CORE_WARNING,
+		E_COMPILE_WARNING,
+		E_USER_WARNING,
+		E_USER_NOTICE,
+		E_STRICT,
+		E_RECOVERABLE_ERROR,
+		E_DEPRECATED,
+		E_USER_DEPRECATED,
 
 	] , true ) ) {
 
-		// Don't show anything in Ray about these.
-		return;
+		// Warnings, etc in orange.
+		\ray( $error )->orange();
 	}
 
 	// If we hit any of theses ERROR's, we'll show the app so you know.
-	if ( in_array( true, defined( 'SPATIE_RAY_NO_ERRORS' ) ? [] : [
+	if ( ( ! defined( 'SPATIE_RAY_NO_ERRORS' ) || false === SPATIE_RAY_NO_ERRORS ) && in_array( $error['type'], [
 
 		/* Errors */
 
-		$error['type'] === E_ERROR,
-		$error['type'] === E_PARSE,
-		$error['type'] === E_CORE_ERROR,
-		$error['type'] === E_COMPILE_ERROR,
-		$error['type'] === E_USER_ERROR,
+		E_ERROR,
+		E_PARSE,
+		E_CORE_ERROR,
+		E_COMPILE_ERROR,
+		E_USER_ERROR,
 
 	], true ) ) {
 
-		// Log the error (in red) and show Ray.
+		// Errors in red.
 		\ray( $error )->red();
-
-		return;
 	}
-
-	\ray( $error ); // Just log the error to Ray (in red).
 }
 register_shutdown_function( '____error_to_spatie_ray' );
