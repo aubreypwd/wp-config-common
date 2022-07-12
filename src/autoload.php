@@ -64,6 +64,44 @@ if ( defined( 'WP_CONFIG_COMMON' ) && is_string( WP_CONFIG_COMMON ) ) {
 	}
 
 	/**
+	 * Send email directly to Mailhog
+	 *
+	 * @since Tuesday, July 12, 2022
+	 */
+	if ( in_array( 'mailhog', $configs, true ) ) {
+
+		function wp_mail ( $to, $subject, $message, $headers = '', $attachments = array() ) {
+
+			$mail = new PHPMailer;
+
+			$mail->isSMTP();
+
+			// Mailhog
+			$mail->Host = defined( 'MAILHOG_HOST' ) ? MAILHOG_HOST : 'localhost';
+			$mail->SMTPAuth = defined( 'MAILHOG_AUTH' ) ? MAILHOG_AUTH : false;
+			$mail->Port = defined( 'MAILHOG_PORT' ) ? MAILHOG_PORT : 1025;
+
+			$mail->setFrom(
+				defined( 'MAILHOG_FROM_EMAIL' ) ? MAILHOG_FROM_EMAIL : "noreply@{$_SERVER['HTTP_HOST']}",
+				defined( 'MAILHOG_FROM_NAME' ) ? MAILHOG_FROM_NAME : $_SERVER['HTTP_HOST']
+			);
+
+			$mail->addAddress( $to, $to );
+
+			foreach ( $attachments as $attachment ) {
+				$mail->addAttachment( $attachment );
+			}
+
+			$mail->isHTML( true );
+
+			$mail->Subject = $subject;
+			$mail->Body    = $message;
+
+			return $mail->send();
+		}
+	}
+
+	/**
 	 * Support for tunneling using ngrok or localtunnel.
 	 *
 	 * Note, does not work well with multisite!

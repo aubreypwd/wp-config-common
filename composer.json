@@ -11,7 +11,8 @@
     ],
     "require": {
         "spatie/ray": "^1.34",
-        "spatie/macroable": "^1.0"
+        "spatie/macroable": "^1.0",
+        "phpmailer/phpmailer": "^5.2"
     },
     "autoload": {
       "files": [
