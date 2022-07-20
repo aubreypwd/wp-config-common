@@ -20,26 +20,34 @@ You must define this _before_ you require `autoload.php` above!
 define( 'WP_CONFIG_COMMON', 'max-execution-3600, multisite, spatie-ray, tunnel, noemail, mailhog' );
 ```
 
-### `max-execution-3600` ([source](src/autoload.php))
+### `max-execution-3600`
 
 Simply tries to set `max_execution_time` to one hour (for debugging, etc).
 
-### `multisite` ([source](src/autoload.php))
+### `install-multisite`
 
-Configures multisite to be _on_.
+Use this before `multisite` if you have not installed multisite into the database yet. After turning this on, head to `/wp-admin/network.php` and install multisite. When done, you can use `multisite` to turn multisite on and off again easily.
 
-### `spatie-ray` ([source](src/spatie-ray.php))
+- If you don't specify `SUBDOMAIN_INSTALL` we assume `false` for you.
+- If you don't specify `DOMAIN_CURRENT_SITE`, we assume `$_SERVER['HTTP_HOST']`
+
+
+### `multisite`
+
+Configures multisite (note use `install-multisite` first.
+
+### `spatie-ray`
 
 Pushes all Warnings and Errors from PHP to Spatie Ray(tm).
 
 Set `define( 'SPATIE_RAY_NO_WARNINGS', true )'` to stop warnings. 
 Set `define( 'SPATIE_RAY_NO_ERRORS', true )'` to stop errors. 
 
-### `tunnel` ([source](src/autoload.php))
+### `tunnel`
 
 Tries to automatically trick WordPress into thinking the website (single-site only, the the way) is the proxy. Works with `localtunnel` and `ngrock`.
 
-### `no-email` ([source](src/autoload.php))
+### `no-email`
 
 Stops `wp_mail` from working by overriding the function. You can define `WP_MAIL_RETURN` with the overridden function's return value, which is `false` by default.
 

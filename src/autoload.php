@@ -27,6 +27,17 @@ if ( defined( 'WP_CONFIG_COMMON' ) && is_string( WP_CONFIG_COMMON ) ) {
 	}
 
 	/**
+	 * Allow multisite
+	 *
+	 * Use to install multisite, then enable multisite.
+	 *
+	 * @since Wednesday, July 20, 2022
+	 */
+	if ( in_array( 'install-multisite', $configs, true ) ) {
+		define( 'WP_ALLOW_MULTISITE', true );
+	}
+
+	/**
 	 * Multisite
 	 *
 	 * Common multisite settings, you MUST control DOMAIN_CURRENT_SITE and
@@ -36,15 +47,24 @@ if ( defined( 'WP_CONFIG_COMMON' ) && is_string( WP_CONFIG_COMMON ) ) {
 	 */
 	if ( in_array( 'multisite', $configs, true ) ) {
 
-		if ( ! defined( 'DOMAIN_CURRENT_SITE' ) ) {
-			die( 'You must define DOMAIN_CURRENT_SITE.' );
+		if ( ! defined( 'DOMAIN_CURRENT_SITE' ) && isset( $_SERVER['HTTP_HOST'] ) ) {
+
+			// Assume the current host.
+			define( 'DOMAIN_CURRENT_SITE', $_SERVER['HTTP_HOST'] );
+		} elseif ( ! defined( 'DOMAIN_CURRENT_SITE' ) ) {
+
+			// We can't assume the current host, so you have to tell us what's in the DB.
+			die( 'Please define DOMAIN_CURRENT_SITE since we cannot assume $_SERVER[HTTP_HOST]' );
+		}
+
+		if ( ! defined( 'SUBDOMAIN_INSTALL' ) ) {
+			define( 'SUBDOMAIN_INSTALL', false );
 		}
 
 		if ( ! defined( 'SUBDOMAIN_INSTALL' ) ) {
 			die( 'You must define SUBDOMAIN_INSTALL' );
 		}
 
-		define( 'WP_ALLOW_MULTISITE', true );
 		define( 'MULTISITE', true );
 		define( 'PATH_CURRENT_SITE', '/' );
 		define( 'SITE_ID_CURRENT_SITE', 1 );
